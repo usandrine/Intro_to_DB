@@ -1,4 +1,7 @@
 # MySQLServer.py
+
+import os
+import re
 import mysql.connector
 from mysql.connector import Error
 
@@ -27,3 +30,27 @@ def create_database():
 
 if __name__ == "__main__":
     create_database()
+
+def check_task_1():
+    print("🔍 Checking Task 1...")
+    file_path = "MySQLServer.py"
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        print("❌ MySQLServer.py file not found.")
+        return
+
+    with open(file_path, 'r') as f:
+        content = f.read()
+
+    # Check for exception handling
+    if "try:" in content and "except" in content:
+        print("✅ Contains code to handle exceptions.")
+    else:
+        print("❌ Missing exception handling (try/except).")
+
+    # Check if SELECT or SHOW statements are not used
+    if re.search(r"\bSELECT\b", content, re.IGNORECASE) or re.search(r"\bSHOW\b", content, re.IGNORECASE):
+        print("❌ Should not use SELECT or SHOW statements.")
+    else:
+        print("✅ No SELECT or SHOW statements found.")
