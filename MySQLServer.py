@@ -1,36 +1,45 @@
 #!/usr/bin/env python3
 """
-MySQLServer.py
-A simple Python script to create a database named 'alx_book_store'
+Script to create alx_book_store database in MySQL server.
 """
 
 import mysql.connector
-from mysql.connector import Error
 
 def create_database():
+    """
+    Create the alx_book_store database if it doesn't exist.
+    """
     try:
         # Establish connection to MySQL server
         connection = mysql.connector.connect(
-            host='localhost',
-            user='root',        
-            password='yourpassword' 
+            host="localhost",
+            user="root",  # Change this to your MySQL username
+            password=""   # Change this to your MySQL password
         )
-
+        
         if connection.is_connected():
+            # Create a cursor object
             cursor = connection.cursor()
-            # Create database if it does not exist
-            cursor.execute("CREATE DATABASE IF NOT EXISTS alx_book_store")
+            
+            # Create database if it doesn't exist
+            # Using IF NOT EXISTS to prevent failure if database already exists
+            create_db_query = "CREATE DATABASE IF NOT EXISTS alx_book_store"
+            cursor.execute(create_db_query)
+            
+            # Print success message
             print("Database 'alx_book_store' created successfully!")
-
-    except Error as e:
-        print(f"Error while connecting to MySQL: {e}")
-
-    finally:
-        # Close the cursor and connection
-        if 'cursor' in locals() and cursor:
+            
+            # Close cursor and connection
             cursor.close()
-        if 'connection' in locals() and connection.is_connected():
             connection.close()
+            
+    except mysql.connector.Error as err:
+        # Handle MySQL connection errors
+        print(f"Error: {err}")
+        
+    except Exception as e:
+        # Handle any other exceptions
+        print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     create_database()
